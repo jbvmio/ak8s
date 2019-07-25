@@ -3,7 +3,7 @@ package ak8s
 import (
 	"log"
 
-	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/kubernetes" 
 )
 
 // Client intereacts with Kubernetes.
@@ -26,6 +26,18 @@ func NewClient(inCluster bool) (*Client, error) {
 		return &client, nil
 	}
 	cs, err := CreateClientSet()
+	if err != nil {
+		return &client, err
+	}
+	client.CS = cs
+	client.Options = makeActionMap()
+	return &client, nil
+}
+
+// NewClientFromConfig returns a new Client using the given configPath.
+func NewClientFromConfig(configPath string) (*Client, error) {
+	var client Client
+	cs, err := CreateClientSetFromConfig(configPath)
 	if err != nil {
 		return &client, err
 	}

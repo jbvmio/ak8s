@@ -49,6 +49,15 @@ func CreateICClientSet() (*kubernetes.Clientset, error) {
 	return kubernetes.NewForConfig(config)
 }
 
+// CreateClientSetFromConfig returns a Clientset from the given configPath.
+func CreateClientSetFromConfig(configPath string) (*kubernetes.Clientset, error) {
+	config, err := clientcmd.BuildConfigFromFlags("", configPath)
+	if err != nil {
+		return &kubernetes.Clientset{}, err
+	}
+	return kubernetes.NewForConfig(config)
+}
+
 // CreateUserClientSet returns a clientset using username/password values.
 func CreateUserClientSet(host, username, password string, insecure bool) (*kubernetes.Clientset, error) {
 	tls := rest.TLSClientConfig{Insecure: insecure}
